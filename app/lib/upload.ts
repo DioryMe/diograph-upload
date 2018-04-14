@@ -7,12 +7,15 @@ declare var Promise: any;
 
 export class Upload {
 
-  static test() {
-    return "JOO!"
+  static uploadFiles(event): any {
+    var files = event.target.files
+    var files = event.target.files
+    // TODO: Support for multiple files => some kind of iterator
+    // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
+    this.createDioryFromImageFile(files[0])
   }
 
-  static async createDioryFromImageFile(event): Promise<Diory> {
-    var file = event.target.files[0];
+  static async createDioryFromImageFile(file): Promise<Diory> {
 
     // 1. Background is the uploaded image's S3 url
     // Get uploadUrl from diory-server

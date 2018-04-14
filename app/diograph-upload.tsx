@@ -14,7 +14,7 @@ export class DiographUpload extends React.Component { // <UploadProps, UploadSta
   render() {
     return (
       <div>
-        { Upload.test() }
+        <input type="file" onChange={ event => Upload.uploadFiles(event) } />
       </div>
     )
   }
