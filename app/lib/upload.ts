@@ -7,8 +7,12 @@ declare var Promise: any;
 
 export class Upload {
 
+  // TODO: Replace hardcoded authentication token with the use of DiographAuthentication
+  static getAuthToken() {
+    return "df548369-d0a2-4ca5-b28a-dd4fb14c1f08"
+  }
+
   static uploadFiles(event): any {
-    var files = event.target.files
     var files = event.target.files
     // TODO: Support for multiple files => some kind of iterator
     // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
@@ -41,6 +45,7 @@ export class Upload {
     }
 
     // 4. Create diory and return it
+    DiographStore.setAuthToken(this.getAuthToken());
     return DiographStore.createDiory(dioryData).then(diory => {
       return diory
     })
@@ -75,7 +80,7 @@ export class Upload {
       .get(endpoint)
       .query(query)
       .set("Accept", "application/vnd.api+json")
-      .set("Authorization", "AUTH TOKEN IS MISSING!!")
+      .set("Authorization", this.getAuthToken())
 
     return promise.then(res => {
       return res.body
