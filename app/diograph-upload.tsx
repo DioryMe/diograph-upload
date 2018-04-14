@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Upload } from './lib/upload';
 
 // export interface UploadState { searchResults: any, searchTerm: string }
 // export interface UploadProps { onFocusClick: any }
@@ -13,7 +14,7 @@ export class DiographUpload extends React.Component { // <UploadProps, UploadSta
   render() {
     return (
       <div>
-        Jeejee
+        { Upload.test() }
       </div>
     )
   }
