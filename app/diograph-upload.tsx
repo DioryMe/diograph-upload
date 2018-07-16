@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Upload } from './lib/upload';
 
-// export interface UploadState { searchResults: any, searchTerm: string }
-// export interface UploadProps { onFocusClick: any }
+export interface UploadState {}
+export interface UploadProps { secrets: any }
 
-export class DiographUpload extends React.Component { // <UploadProps, UploadState>
+export class DiographUpload extends React.Component <UploadProps, UploadState> {
 
   constructor(props) {
     super(props)
@@ -14,15 +14,9 @@ export class DiographUpload extends React.Component { // <UploadProps, UploadSta
   render() {
     return (
       <div>
-        <input type="file" onChange={ event => Upload.uploadFiles(event) } />
+        <input type="file" onChange={ event => Upload.uploadFiles(event, this.props.secrets.master) } />
       </div>
     )
-  }
-
-  onFocusClick(dioryId) {
-    this.setState({searchResults: []})
-    this.setState({searchTerm: ""})
-    // this.props.onFocusClick(dioryId)
   }
 
 }

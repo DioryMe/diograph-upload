@@ -12,12 +12,15 @@ export class Upload {
     return "df548369-d0a2-4ca5-b28a-dd4fb14c1f08"
   }
 
-  static uploadFiles(event): any {
+  static uploadFiles(event, token): any {
+    console.log(token)
     var files = event.target.files
     // TODO: Support for multiple files => some kind of iterator
     // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
-    this.createDioryFromImageFile(files[0])
+    // this.createDioryFromImageFile(files[0])
   }
+
+// PRIVATE METHODS
 
   static async createDioryFromImageFile(file): Promise<Diory> {
 
