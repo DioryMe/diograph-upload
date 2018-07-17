@@ -8,7 +8,7 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
 
   constructor(props) {
     super(props)
-    this.state = {state: "loading"}
+    this.state = {state: "pending"}
   }
 
   render() {
@@ -16,6 +16,7 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
       case "pending": {
         return (
           <div>
+            Select file: <br/>
             <input type="file" onChange={ event => Upload.uploadFiles(event, this.props.secrets.master) } />
           </div>
         )

@@ -19,7 +19,13 @@ describe('<DiographUpload />', () => {
     expect(component.props.secrets).toEqual(secrets)
   })
 
-  it('Uploading state: correct content for div', () => {
+  it('Pending state: correct content for div', () => {
+    wrapper.setState({ state: "pending" })
+    let componentText = wrapper.find('div').text();
+    expect(componentText).toEqual("Select file: ")
+  })
+
+  it('Loading state: correct content for div', () => {
     wrapper.setState({ state: "loading" })
     let componentText = wrapper.find('div').text();
     expect(componentText).toEqual("Uploading the image... 10%")
