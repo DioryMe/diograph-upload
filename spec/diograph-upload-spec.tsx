@@ -15,9 +15,13 @@ describe('<DiographUpload />', () => {
     component = wrapper.instance();
   })
 
+  // Secrets props
+
   it('sets secrets from props', () => {
     expect(component.props.secrets).toEqual(secrets)
   })
+
+  // Integration tests for UI states
 
   it('Pending state: correct content for div', () => {
     wrapper.setState({ state: "pending" })
@@ -29,6 +33,18 @@ describe('<DiographUpload />', () => {
     wrapper.setState({ state: "loading" })
     let componentText = wrapper.find('div').text();
     expect(componentText).toEqual("Uploading the image... 10%")
+  })
+
+  it('Success state: correct content for div', () => {
+    wrapper.setState({ state: "success" })
+    let componentText = wrapper.find('div').text();
+    expect(componentText).toEqual("Image succesfully uploaded!")
+  })
+
+  it('Error state: correct content for div', () => {
+    wrapper.setState({ state: "error" })
+    let componentText = wrapper.find('div').text();
+    expect(componentText).toEqual("Something went wrong while uploading the image...")
   })
 
 })
