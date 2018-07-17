@@ -17,7 +17,7 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
         return (
           <div>
             Select file: <br/>
-            <input type="file" onChange={ event => Upload.uploadFiles(event, this.props.secrets.master) } />
+            <input type="file" onChange={ event => this.startUploading(event) } />
           </div>
         )
       }
@@ -31,6 +31,18 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
         return ( <div>Something went wrong while uploading the image...</div> )
       }
     }
+  }
+
+  startUploading(event) {
+    this.setState({state: "loading"})
+    Upload.uploadFiles(event, this.props.secrets.master).then((msg) => {
+      console.log(msg)
+      if (msg == "jeejee") {
+        this.setState({state: "success"})
+      } else {
+        this.setState({state: "error"})
+      }
+    })
   }
 
 }

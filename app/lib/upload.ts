@@ -15,6 +15,9 @@ export class Upload {
   static uploadFiles(event, token): any {
     console.log(token)
     var files = event.target.files
+    return new Promise((resolve) => {
+      resolve("jeejee")
+    })
     // TODO: Support for multiple files => some kind of iterator
     // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
     // this.createDioryFromImageFile(files[0])

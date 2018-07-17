@@ -21,6 +21,9 @@ describe('<DiographUpload />', () => {
     expect(component.props.secrets).toEqual(secrets)
   })
 
+  // TODO: onChange for input field passes master token to uploadFiles(event, token)
+  // - spyOn(Upload.uploadFiles()).toReceive(event & token)
+
   // Integration tests for UI states
 
   it('Pending state: correct content for div', () => {
