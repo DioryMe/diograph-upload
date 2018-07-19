@@ -24,21 +24,7 @@ export class Upload {
   static async createDioryFromImageFile(file): Promise<Diory> {
 
     // 1. Background is the uploaded image's S3 url
-    // Get uploadUrl from diory-server
-    let background = await this.getUploadUrls().then(uploadUrls => {
-        // Try to upload file to S3
-        let S3Response = await this.S3ManagerUpload(uploadUrls["upload-url"], file)
-          .then(response => {
-            return response
-          })
-
-        // Return file's public url on success
-        if (S3Response.ok) {
-          return uploadUrls["public-url"]
-        } else {
-          return "new Error(" + S3Response.body + ")"
-        }
-      })
+    let background = await this.getBackground(file)
 
     // 2. Date, latitude & longitude are extracted from EXIF
     let exif = await this.extractEXIFData(file)
@@ -70,6 +56,25 @@ export class Upload {
       })
   }
 
+  static async getBackground(file) {
+    // Get uploadUrl from diory-server
+    let uploadUrl = await this.getUploadUrl()
+
+    // Try to upload file to S3
+    let S3Response
+    await this.S3ManagerUpload(uploadUrl["upload-url"], file)
+      .then(response => {
+        S3Response = response
+      })
+
+    // Return file's public url on success
+    if (S3Response.ok) {
+      return uploadUrl["public-url"]
+    } else {
+      return "new Error(" + S3Response.body + ")"
+    }
+  }
+
   static async extractEXIFData(file) {
     let self = this
     return new Promise((resolve) => {
@@ -88,8 +93,8 @@ export class Upload {
       (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
   };
 
-  static getUploadUrls() {
-    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url").then((response) => {
+  static getUploadUrl() {
+    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url").then(response => {
       return response.data
     })
   }
