@@ -2,6 +2,9 @@ import * as React from 'react'
 import { configure, shallow } from 'enzyme'
 import * as Adapter from 'enzyme-adapter-react-16';
 import { DiographUpload } from '../app/diograph-upload'
+import { Upload } from '../app/lib/upload'
+
+declare var Promise: any;
 
 describe('<DiographUpload />', () => {
   let wrapper, component, secrets
@@ -21,8 +24,16 @@ describe('<DiographUpload />', () => {
     expect(component.props.secrets).toEqual(secrets)
   })
 
-  // TODO: onChange for input field passes master token to uploadFiles(event, token)
-  // - spyOn(Upload.uploadFiles()).toReceive(event & token)
+  // Integration tests for file uploading
+
+  it('calls Upload.uploadFiles() with correct attributes when file(s) are chosen', () => {
+    let uploadFilesReturnValue = new Promise(resolve => { resolve("jeejee") })
+    let uploadFilesSpy = spyOn(Upload, 'uploadFiles').and.returnValue(uploadFilesReturnValue)
+    wrapper.find('input').first().simulate('change', "eventObject");
+    expect(uploadFilesSpy).toHaveBeenCalled()
+    expect(uploadFilesSpy.calls.argsFor(0)).toEqual(["eventObject", "kissa123"])
+  })
+
 
   // Integration tests for UI states
 
