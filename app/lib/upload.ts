@@ -2,35 +2,36 @@ import { DiographStore, Diory } from 'diograph-store'
 import { EXIF } from 'exif-js'
 import * as request from "superagent"
 
-// Promise.all() requires this to work
+// new Promise() requires this to work
 declare var Promise: any;
 
 export class Upload {
 
-  // TODO: Replace hardcoded authentication token with the use of DiographAuthentication
-  static getAuthToken() {
-    return "df548369-d0a2-4ca5-b28a-dd4fb14c1f08"
-  }
-
   static uploadFiles(event, token): any {
-    var files = event.target.files
+    let files = event.target.files
+    DiographStore.setAuthToken(token);
+
     // TODO: Support for multiple files => some kind of iterator
     // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
-    this.createDioryFromImageFile(files[0])
+    let dioryData = this.generateDioryDataFromImageFile(files[0], token)
+    return DiographStore.createDiory(dioryData).then(diory => {
+      // return diory
+      return "jeejee"
+    })
   }
 
 // PRIVATE METHODS
 
-  static async createDioryFromImageFile(file): Promise<Diory> {
+  static async generateDioryDataFromImageFile(file, token): object {
 
     // 1. Background is the uploaded image's S3 url
-    let background = await this.getBackground(file)
+    let background = await this.getBackground(file, token)
 
     // 2. Date, latitude & longitude are extracted from EXIF
     let exif = await this.extractEXIFData(file)
 
     // 3. Diory attributes are composed to dioryData
-    let dioryData = {
+    return {
       name: file.name,
       type: "image",
       background: background,
@@ -38,12 +39,6 @@ export class Upload {
       latitude: exif["latitude"],
       longitude: exif["longitude"]
     }
-
-    // 4. Create diory and return it
-    DiographStore.setAuthToken(this.getAuthToken());
-    return DiographStore.createDiory(dioryData).then(diory => {
-      return diory
-    })
   }
 
   static async S3ManagerUpload(uploadUrl, file) {
@@ -56,9 +51,9 @@ export class Upload {
       })
   }
 
-  static async getBackground(file) {
+  static async getBackground(file, token) {
     // Get uploadUrl from diory-server
-    let uploadUrl = await this.getUploadUrl()
+    let uploadUrl = await this.getUploadUrl(token)
 
     // Try to upload file to S3
     let S3Response
@@ -93,18 +88,18 @@ export class Upload {
       (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
   };
 
-  static getUploadUrl() {
-    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url").then(response => {
+  static getUploadUrl(token) {
+    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url", token).then(response => {
       return response.data
     })
   }
 
-  private static getFromEndpoint(endpoint, query={}) {
+  private static getFromEndpoint(endpoint, token) { // query={}) {
     var promise = request
       .get(endpoint)
-      .query(query)
+      // .query(query)
       .set("Accept", "application/vnd.api+json")
-      .set("Authorization", this.getAuthToken())
+      .set("Authorization", token)
 
     return promise.then(res => {
       return res.body
