@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Upload } from './lib/upload';
+import { DioryFactory } from './lib/diory-factory';
 
 export interface UploadState { state: string }
 export interface UploadProps { secrets: any }
@@ -35,7 +35,7 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
 
   startUploading(event) {
     this.setState({state: "loading"})
-    Upload.uploadFiles(event, this.props.secrets.master).then((msg) => {
+    DioryFactory.createDioryFromFile(event.target.files[0], this.props.secrets.master).then((msg) => {
       console.log(msg)
       if (msg == "jeejee") {
         this.setState({state: "success"})

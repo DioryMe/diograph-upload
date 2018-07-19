@@ -2,7 +2,7 @@ import * as React from 'react'
 import { configure, shallow } from 'enzyme'
 import * as Adapter from 'enzyme-adapter-react-16';
 import { DiographUpload } from '../app/diograph-upload'
-import { Upload } from '../app/lib/upload'
+import { DioryFactory } from '../app/lib/diory-factory'
 
 declare var Promise: any;
 
@@ -26,12 +26,13 @@ describe('<DiographUpload />', () => {
 
   // Integration tests for file uploading
 
-  it('calls Upload.uploadFiles() with correct attributes when file(s) are chosen', () => {
+  it('calls DioryFactory.createDioryFromFile() with correct attributes when file(s) are chosen', () => {
     let uploadFilesReturnValue = new Promise(resolve => { resolve("jeejee") })
-    let uploadFilesSpy = spyOn(Upload, 'uploadFiles').and.returnValue(uploadFilesReturnValue)
-    wrapper.find('input').first().simulate('change', "eventObject");
+    let uploadFilesSpy = spyOn(DioryFactory, 'createDioryFromFile').and.returnValue(uploadFilesReturnValue)
+    let eventObject = { target: { files: ["file"] } }
+    wrapper.find('input').first().simulate('change', eventObject);
     expect(uploadFilesSpy).toHaveBeenCalled()
-    expect(uploadFilesSpy.calls.argsFor(0)).toEqual(["eventObject", "kissa123"])
+    expect(uploadFilesSpy.calls.argsFor(0)).toEqual(["file", "kissa123"])
   })
 
 

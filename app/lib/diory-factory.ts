@@ -5,15 +5,14 @@ import * as request from "superagent"
 // new Promise() requires this to work
 declare var Promise: any;
 
-export class Upload {
+export class DioryFactory {
 
-  static uploadFiles(event, token): any {
-    let files = event.target.files
+  static createDioryFromFile(file, token): any {
     DiographStore.setAuthToken(token);
 
     // TODO: Support for multiple files => some kind of iterator
     // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
-    let dioryData = this.generateDioryDataFromImageFile(files[0], token)
+    let dioryData = this.generateDioryDataFromImageFile(file, token)
     return DiographStore.createDiory(dioryData).then(diory => {
       // return diory
       return "jeejee"
