@@ -20,14 +20,18 @@ export class Upload {
     })
   }
 
-// PRIVATE METHODS
 
-  static async generateDioryDataFromImageFile(file, token): object {
+// ------- PRIVATE METHODS --------
+
+
+// Generate diory data by getting the background and extracting the EXIF data
+  static async generateDioryDataFromImageFile(file, token): Promise<object> {
 
     // 1. Background is the uploaded image's S3 url
     let background = await this.getBackground(file, token)
 
     // 2. Date, latitude & longitude are extracted from EXIF
+    // TODO: Skip this if no EXIF data available => return empty object {}
     let exif = await this.extractEXIFData(file)
 
     // 3. Diory attributes are composed to dioryData
@@ -41,15 +45,8 @@ export class Upload {
     }
   }
 
-  static async S3ManagerUpload(uploadUrl, file) {
-    // Upload the file to S3 via PUT request to uploadUrl
-    return request
-      .put(uploadUrl)
-      .send(file)
-      .then(response => {
-        return response
-      })
-  }
+
+// Upload to S3 and get its public url as background for the created diory
 
   static async getBackground(file, token) {
     // Get uploadUrl from diory-server
@@ -70,6 +67,40 @@ export class Upload {
     }
   }
 
+  static getUploadUrl(token) {
+    // TODO: Use some similar generic DiographStore / DiographServerManager method instead of duplicating it here
+    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url", token).then(response => {
+      return response.data
+    })
+  }
+
+  static async S3ManagerUpload(uploadUrl, file) {
+    // Upload the file to S3 via PUT request to uploadUrl
+    return request
+      .put(uploadUrl)
+      .send(file)
+      .then(response => {
+        return response
+      })
+  }
+
+
+  // TODO: Use some similar generic DiographStore / DiographServerManager method instead of duplicating it here
+  private static getFromEndpoint(endpoint, token) { // query={}) {
+    var promise = request
+      .get(endpoint)
+      // .query(query)
+      .set("Accept", "application/vnd.api+json")
+      .set("Authorization", token)
+
+    return promise.then(res => {
+      return res.body
+    }, err => { throw err })
+  }
+
+
+// EXIF stuff
+
   static async extractEXIFData(file) {
     let self = this
     return new Promise((resolve) => {
@@ -87,23 +118,5 @@ export class Upload {
     return number[0].numerator + number[1].numerator /
       (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
   };
-
-  static getUploadUrl(token) {
-    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url", token).then(response => {
-      return response.data
-    })
-  }
-
-  private static getFromEndpoint(endpoint, token) { // query={}) {
-    var promise = request
-      .get(endpoint)
-      // .query(query)
-      .set("Accept", "application/vnd.api+json")
-      .set("Authorization", token)
-
-    return promise.then(res => {
-      return res.body
-    }, err => { throw err })
-  }
 
 }
