@@ -25,12 +25,19 @@ export class Upload {
 
     // 1. Background is the uploaded image's S3 url
     // Get uploadUrl from diory-server
-    let background = await this.getUploadUrls().then((uploadUrls) => {
-        // Upload the file to S3 via PUT request to uploadUrl
-        return request.put(uploadUrls["upload-url"]).send(file).then((response) => {
-          // Return S3 url
+    let background = await this.getUploadUrls().then(uploadUrls => {
+        // Try to upload file to S3
+        let S3Response = await this.S3ManagerUpload(uploadUrls["upload-url"], file)
+          .then(response => {
+            return response
+          })
+
+        // Return file's public url on success
+        if (S3Response.ok) {
           return uploadUrls["public-url"]
-        })
+        } else {
+          return "new Error(" + S3Response.body + ")"
+        }
       })
 
     // 2. Date, latitude & longitude are extracted from EXIF
@@ -51,6 +58,16 @@ export class Upload {
     return DiographStore.createDiory(dioryData).then(diory => {
       return diory
     })
+  }
+
+  static async S3ManagerUpload(uploadUrl, file) {
+    // Upload the file to S3 via PUT request to uploadUrl
+    return request
+      .put(uploadUrl)
+      .send(file)
+      .then(response => {
+        return response
+      })
   }
 
   static async extractEXIFData(file) {
