@@ -10,6 +10,8 @@ describe('DioryFactory', () => {
     return new Promise(resolve => { resolve(content) })
   }
 
+  let file = {name: "New Diory from Image file"}
+  let token = "cat4321"
   let uploadUrlResponseObject, exifData
   let createDiorySpy, getFromEndpointSpy, extractEXIFDataSpy, uploadToS3Spy
   let createDioryFromFilePromise
@@ -44,7 +46,7 @@ describe('DioryFactory', () => {
 
 
     // Generic execution
-    createDioryFromFilePromise = DioryFactory.createDioryFromFile("file", "token")
+    createDioryFromFilePromise = DioryFactory.createDioryFromFile(file, token)
   })
 
   describe('createDioryFromFile', () => {
@@ -56,9 +58,13 @@ describe('DioryFactory', () => {
       })
     })
 
-    it('createDioryFromFile', done => {
+    it('calls DiographStore.createDiory with correct arguments', done => {
       createDioryFromFilePromise.then(diory => {
-        expect(diory).toEqual("jeejee")
+        let expectedDioryData = exifData
+        expectedDioryData["name"] = file.name
+        expectedDioryData["type"] = "image"
+        expectedDioryData["background"] = uploadUrlResponseObject.data["public-url"]
+        expect(createDiorySpy.calls.argsFor(0)).toEqual([expectedDioryData])
         done()
       })
     })
@@ -66,18 +72,6 @@ describe('DioryFactory', () => {
 
 
   // PRIVATE METHOD TESTS (should be unnecessary...)
-
-  it('generateDioryDataFromImageFile', done => {
-    let file = {name: "New Diory from Image file"}
-    DioryFactory.generateDioryDataFromImageFile(file, "token").then(dioryData => {
-      let expectedDioryData = exifData
-      expectedDioryData["name"] = file.name
-      expectedDioryData["type"] = "image"
-      expectedDioryData["background"] = uploadUrlResponseObject.data["public-url"]
-      expect(dioryData).toEqual(expectedDioryData)
-      done()
-    })
-  })
 
   it('getBackground', done => {
     DioryFactory.getBackground("file", "token").then(background => {
