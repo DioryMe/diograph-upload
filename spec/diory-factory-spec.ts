@@ -13,14 +13,14 @@ describe('DioryFactory', () => {
   let file = {name: "New Diory from Image file"}
   let token = "cat4321"
   let uploadUrlResponseObject, exifData
-  let createDiorySpy, getFromEndpointSpy, extractEXIFDataSpy, uploadToS3Spy
+  let setAuthTokenSpy, createDiorySpy, getFromEndpointSpy, extractEXIFDataSpy, uploadToS3Spy
   let createDioryFromFilePromise
 
   beforeEach(() => {
     // Stub all the dependencies:
 
     // 1. DiographStore
-    spyOn(DiographStore, "setAuthToken")
+    setAuthTokenSpy = spyOn(DiographStore, "setAuthToken")
     createDiorySpy = spyOn(DiographStore, "createDiory").and.returnValue(genericPromise())
 
     // 2. DiographServer presigned-upload-url endpoint
@@ -58,13 +58,24 @@ describe('DioryFactory', () => {
       })
     })
 
+    it('calls DiographStore.setAuthtoken with correct arguments', done => {
+      createDioryFromFilePromise.then(diory => {
+        expect(setAuthTokenSpy.calls.count()).toEqual(1)
+        expect(setAuthTokenSpy.calls.argsFor(0)).toEqual([token])
+        done()
+      })
+    })
+
     it('calls DiographStore.createDiory with correct arguments', done => {
       createDioryFromFilePromise.then(diory => {
         let expectedDioryData = exifData
         expectedDioryData["name"] = file.name
         expectedDioryData["type"] = "image"
         expectedDioryData["background"] = uploadUrlResponseObject.data["public-url"]
+
+        expect(createDiorySpy.calls.count()).toEqual(1)
         expect(createDiorySpy.calls.argsFor(0)).toEqual([expectedDioryData])
+
         done()
       })
     })
