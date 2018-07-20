@@ -11,13 +11,15 @@ describe('DioryFactory', () => {
   }
 
   let uploadUrlResponseObject, exifData
+  let createDiorySpy, getFromEndpointSpy, extractEXIFDataSpy, uploadToS3Spy
+  let createDioryFromFilePromise
 
   beforeEach(() => {
     // Stub all the dependencies:
 
     // 1. DiographStore
     spyOn(DiographStore, "setAuthToken")
-    spyOn(DiographStore, "createDiory").and.returnValue(genericPromise())
+    createDiorySpy = spyOn(DiographStore, "createDiory").and.returnValue(genericPromise())
 
     // 2. DiographServer presigned-upload-url endpoint
     uploadUrlResponseObject = {
@@ -26,7 +28,7 @@ describe('DioryFactory', () => {
         "public-url": "http://public.url/"
       }
     }
-    spyOn(DioryFactory, "getFromEndpoint").and.returnValue(genericPromise(uploadUrlResponseObject))
+    getFromEndpointSpy = spyOn(DioryFactory, "getFromEndpoint").and.returnValue(genericPromise(uploadUrlResponseObject))
 
     // 3. EXIF data extraction
     exifData = {
@@ -34,22 +36,33 @@ describe('DioryFactory', () => {
       "latitude": "67.432",
       "longitude": "32.345"
     }
-    spyOn(DioryFactory, "extractEXIFData").and.returnValue(genericPromise(exifData))
+    extractEXIFDataSpy = spyOn(DioryFactory, "extractEXIFData").and.returnValue(genericPromise(exifData))
 
     // 4. S3 upload with PUT request
     let S3ResponseObject = { "ok": true }
-    spyOn(DioryFactory, "uploadToS3").and.returnValue(genericPromise(S3ResponseObject))
+    uploadToS3Spy = spyOn(DioryFactory, "uploadToS3").and.returnValue(genericPromise(S3ResponseObject))
+
+
+    // Generic execution
+    createDioryFromFilePromise = DioryFactory.createDioryFromFile("file", "token")
   })
 
-  it('createDioryFromFile', done => {
-    // Execute function and assert the return value
-    DioryFactory.createDioryFromFile("file", "token").then(diory => {
-      expect(diory).toEqual("jeejee")
-      done()
+  describe('createDioryFromFile', () => {
+
+    it('returns "jeejee"', done => {
+      createDioryFromFilePromise.then(diory => {
+        expect(diory).toEqual("jeejee")
+        done()
+      })
+    })
+
+    it('createDioryFromFile', done => {
+      createDioryFromFilePromise.then(diory => {
+        expect(diory).toEqual("jeejee")
+        done()
+      })
     })
   })
-
-
 
 
   // PRIVATE METHOD TESTS (should be unnecessary...)
