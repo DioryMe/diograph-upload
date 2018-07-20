@@ -7,12 +7,12 @@ declare var Promise: any;
 
 export class DioryFactory {
 
-  static createDioryFromFile(file, token): any { // : Promise<Diory>
+  static async createDioryFromFile(file, token): Promise<string> {
     DiographStore.setAuthToken(token);
 
     // TODO: Support for multiple files => some kind of iterator
     // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
-    let dioryData = this.generateDioryDataFromImageFile(file, token)
+    let dioryData = await this.generateDioryDataFromImageFile(file, token)
     return DiographStore.createDiory(dioryData).then(diory => {
       // return diory
       return "jeejee"

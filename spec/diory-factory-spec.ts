@@ -1,11 +1,20 @@
 import { DioryFactory } from '../app/lib/diory-factory'
 import { Diory, DiographStore } from 'diograph-store'
 
+// new Promise() requires this to work
+declare var Promise: any;
+
 describe('DioryFactory', () => {
 
-  it('createDioryFromFile', done => {
+  fit('createDioryFromFile', done => {
+    // Stub three dependencies
+    spyOn(DiographStore, "setAuthToken")
+    spyOn(DioryFactory, "generateDioryDataFromImageFile").and.returnValue(new Promise(resolve => { resolve({ "name": "Diory name"}) }))
+    spyOn(DiographStore, "createDiory").and.returnValue(new Promise(resolve => { resolve("diory") }))
+
+    // Execute function and assert the return value
     DioryFactory.createDioryFromFile("file", "token").then(diory => {
-      expect(diory).toEqual(jasmine.any(Diory))
+      expect(diory).toEqual("jeejee")
       done()
     })
   })
