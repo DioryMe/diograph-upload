@@ -84,7 +84,7 @@ export class DioryFactory {
   }
 
   // TODO: Use some similar generic DiographStore / DiographServerManager method instead of duplicating it here
-  private static getFromEndpoint(endpoint, token) { // query={}) {
+  static getFromEndpoint(endpoint, token) { // query={}) {
     var promise = request
       .get(endpoint)
       // .query(query)
