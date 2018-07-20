@@ -53,7 +53,7 @@ export class DioryFactory {
 
     // Try to upload file to S3
     let S3Response
-    await this.S3ManagerUpload(uploadUrl["upload-url"], file)
+    await this.uploadToS3(uploadUrl["upload-url"], file)
       .then(response => {
         S3Response = response
       })
@@ -66,14 +66,7 @@ export class DioryFactory {
     }
   }
 
-  static getUploadUrl(token) {
-    // TODO: Use some similar generic DiographStore / DiographServerManager method instead of duplicating it here
-    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url", token).then(response => {
-      return response.data
-    })
-  }
-
-  static async S3ManagerUpload(uploadUrl, file) {
+  static async uploadToS3(uploadUrl, file) {
     // Upload the file to S3 via PUT request to uploadUrl
     return request
       .put(uploadUrl)
@@ -83,6 +76,12 @@ export class DioryFactory {
       })
   }
 
+  static getUploadUrl(token) {
+    // TODO: Use some similar generic DiographStore / DiographServerManager method instead of duplicating it here
+    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url", token).then(response => {
+      return response.data
+    })
+  }
 
   // TODO: Use some similar generic DiographStore / DiographServerManager method instead of duplicating it here
   private static getFromEndpoint(endpoint, token) { // query={}) {
