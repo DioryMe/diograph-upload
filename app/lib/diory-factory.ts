@@ -7,7 +7,7 @@ declare var Promise: any;
 
 export class DioryFactory {
 
-  static createDioryFromFile(file, token): any {
+  static createDioryFromFile(file, token): any { // : Promise<Diory>
     DiographStore.setAuthToken(token);
 
     // TODO: Support for multiple files => some kind of iterator
