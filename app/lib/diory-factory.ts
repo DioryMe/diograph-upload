@@ -23,14 +23,13 @@ export class DioryFactory {
 // ------- PRIVATE METHODS --------
 
 
-// Generate diory data by getting the background and extracting the EXIF data
+  // Generate diory data by getting the background and extracting the EXIF data
   static async generateDioryDataFromImageFile(file, token): Promise<object> {
 
     // 1. Background is the uploaded image's S3 url
     let background = await this.getBackground(file, token)
 
     // 2. Date, latitude & longitude are extracted from EXIF
-    // TODO: Skip this if no EXIF data available => return empty object {}
     let exif = await this.extractEXIFData(file)
 
     // 3. Diory attributes are composed to dioryData
@@ -99,6 +98,7 @@ export class DioryFactory {
 
 // EXIF stuff
 
+  // TODO: Skip this if no EXIF data available => return empty object {}
   static async extractEXIFData(file) {
     let self = this
     return new Promise((resolve) => {
@@ -113,8 +113,12 @@ export class DioryFactory {
   }
 
   static toGpsDecimal(number) {
-    return number[0].numerator + number[1].numerator /
-      (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
+    if (number) {
+      return number[0].numerator + number[1].numerator /
+        (60 * number[1].denominator) + number[2].numerator / (3600 * number[2].denominator);
+    } else {
+      return null
+    }
   };
 
 }

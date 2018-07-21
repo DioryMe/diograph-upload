@@ -16,40 +16,40 @@ describe('DioryFactory', () => {
   let setAuthTokenSpy, createDiorySpy, getFromEndpointSpy, extractEXIFDataSpy, uploadToS3Spy
   let createDioryFromFilePromise
 
-  beforeEach(() => {
-    // Stub all the dependencies:
-
-    // 1. DiographStore
-    setAuthTokenSpy = spyOn(DiographStore, "setAuthToken")
-    createDiorySpy = spyOn(DiographStore, "createDiory").and.returnValue(genericPromise())
-
-    // 2. DiographServer presigned-upload-url endpoint
-    uploadUrlResponseObject = {
-      "data": {
-        "upload-url": "http://upload.url/",
-        "public-url": "http://public.url/"
-      }
-    }
-    getFromEndpointSpy = spyOn(DioryFactory, "getFromEndpoint").and.returnValue(genericPromise(uploadUrlResponseObject))
-
-    // 3. EXIF data extraction
-    exifData = {
-      "date": "123123",
-      "latitude": "67.432",
-      "longitude": "32.345"
-    }
-    extractEXIFDataSpy = spyOn(DioryFactory, "extractEXIFData").and.returnValue(genericPromise(exifData))
-
-    // 4. S3 upload with PUT request
-    let S3ResponseObject = { "ok": true }
-    uploadToS3Spy = spyOn(DioryFactory, "uploadToS3").and.returnValue(genericPromise(S3ResponseObject))
-
-
-    // Generic execution
-    createDioryFromFilePromise = DioryFactory.createDioryFromFile(file, token)
-  })
-
   describe('createDioryFromFile', () => {
+
+    beforeEach(() => {
+      // Stub all the dependencies:
+
+      // 1. DiographStore
+      setAuthTokenSpy = spyOn(DiographStore, "setAuthToken")
+      createDiorySpy = spyOn(DiographStore, "createDiory").and.returnValue(genericPromise())
+
+      // 2. DiographServer presigned-upload-url endpoint
+      uploadUrlResponseObject = {
+        "data": {
+          "upload-url": "http://upload.url/",
+          "public-url": "http://public.url/"
+        }
+      }
+      getFromEndpointSpy = spyOn(DioryFactory, "getFromEndpoint").and.returnValue(genericPromise(uploadUrlResponseObject))
+
+      // 3. EXIF data extraction
+      exifData = {
+        "date": "123123",
+        "latitude": "67.432",
+        "longitude": "32.345"
+      }
+      extractEXIFDataSpy = spyOn(DioryFactory, "extractEXIFData").and.returnValue(genericPromise(exifData))
+
+      // 4. S3 upload with PUT request
+      let S3ResponseObject = { "ok": true }
+      uploadToS3Spy = spyOn(DioryFactory, "uploadToS3").and.returnValue(genericPromise(S3ResponseObject))
+
+
+      // Generic execution
+      createDioryFromFilePromise = DioryFactory.createDioryFromFile(file, token)
+    })
 
     it('returns "jeejee"', done => {
       createDioryFromFilePromise.then(diory => {
@@ -109,13 +109,17 @@ describe('DioryFactory', () => {
   })
 
 
-  // PRIVATE METHOD TESTS (should be unnecessary...)
+  // extractEXIFData tests
+  describe('DioryFactory.extractEXIFData', () => {
 
-  it('getBackground', done => {
-    DioryFactory.getBackground("file", "token").then(background => {
-      expect(background).toEqual(uploadUrlResponseObject.data["public-url"])
-      done()
+    it('returns empty object {} if no EXIFData available', done => {
+      let file = {name: "filename.jpg"}
+      DioryFactory.extractEXIFData(file).then(exifData => {
+        expect(exifData).toEqual({})
+        done()
+      })
     })
+
   })
 
 })
