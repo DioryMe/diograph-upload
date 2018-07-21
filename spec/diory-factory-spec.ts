@@ -12,6 +12,7 @@ describe('DioryFactory', () => {
 
   let file = {name: "New Diory from Image file"}
   let token = "cat4321"
+  // TODO: Use real Diory object instead of an empty
   let createdDiory = {}
   let uploadUrlResponseObject, exifData
   let setAuthTokenSpy, createDiorySpy, getFromEndpointSpy, extractEXIFDataSpy, uploadToS3Spy
