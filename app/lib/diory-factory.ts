@@ -98,7 +98,6 @@ export class DioryFactory {
 
 // EXIF stuff
 
-  // TODO: Skip this if no EXIF data available => return empty object {}
   static async extractEXIFData(file) {
     let self = this
     return new Promise((resolve) => {
