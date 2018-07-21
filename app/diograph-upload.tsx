@@ -12,25 +12,31 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
   }
 
   render() {
+    let message
     switch(this.state.state) {
       case "pending": {
-        return (
-          <div>
-            Select file: <br/>
-            <input type="file" onChange={ event => this.startUploading(event) } />
-          </div>
-        )
+        break
       }
       case "loading": {
-        return ( <div>Uploading the image... 10%</div> )
+        message = "Uploading the image..."
+        break
       }
       case "success": {
-        return ( <div>Image succesfully uploaded!</div> )
+        message = "Diory succesfully created!"
+        break
       }
       case "error": {
-        return ( <div>Something went wrong while uploading the image...</div> )
+        message = "Something went wrong while uploading the image..."
+        break
       }
     }
+    return (
+      <div>
+        Select file: <br/>
+        <input type="file" onChange={ event => this.startUploading(event) } />
+        <div id="message">{ message }</div>
+      </div>
+    )
   }
 
   startUploading(event) {

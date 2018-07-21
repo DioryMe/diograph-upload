@@ -61,25 +61,25 @@ describe('<DiographUpload />', () => {
 
   it('Pending state: correct content for div', () => {
     wrapper.setState({ state: "pending" })
-    let componentText = wrapper.find('div').text();
+    let componentText = wrapper.find('div').first().text();
     expect(componentText).toEqual("Select file: ")
   })
 
   it('Loading state: correct content for div', () => {
     wrapper.setState({ state: "loading" })
-    let componentText = wrapper.find('div').text();
-    expect(componentText).toEqual("Uploading the image... 10%")
+    let componentText = wrapper.find('#message').text();
+    expect(componentText).toEqual("Uploading the image...")
   })
 
   it('Success state: correct content for div', () => {
     wrapper.setState({ state: "success" })
-    let componentText = wrapper.find('div').text();
-    expect(componentText).toEqual("Image succesfully uploaded!")
+    let componentText = wrapper.find('#message').text();
+    expect(componentText).toEqual("Diory succesfully created!")
   })
 
   it('Error state: correct content for div', () => {
     wrapper.setState({ state: "error" })
-    let componentText = wrapper.find('div').text();
+    let componentText = wrapper.find('#message').text();
     expect(componentText).toEqual("Something went wrong while uploading the image...")
   })
 
