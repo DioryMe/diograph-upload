@@ -27,8 +27,8 @@ describe('<DiographUpload />', () => {
   // Integration tests for file uploading
 
   it('calls DioryFactory.createDioryFromFile() with correct attributes when file(s) are chosen', () => {
-    // TODO: Return a real diory instead of "jeejee"
-    let uploadFilesReturnValue = new Promise(resolve => { resolve("jeejee") })
+    // TODO: Return a real diory instead of "diory"
+    let uploadFilesReturnValue = new Promise(resolve => { resolve("diory") })
     let uploadFilesSpy = spyOn(DioryFactory, 'createDioryFromFile').and.returnValue(uploadFilesReturnValue)
     let eventObject = { target: { files: ["file"] } }
     wrapper.find('input').first().simulate('change', eventObject);
@@ -36,13 +36,24 @@ describe('<DiographUpload />', () => {
     expect(uploadFilesSpy.calls.argsFor(0)).toEqual(["file", "kissa123"])
   })
 
-  it('goes to error state when error is thrown', () => {
+  it('goes to error state when error is thrown in DioryFactory.createDioryFromFile', () => {
     let uploadFilesReturnValue = new Promise(() => { throw new Error("error") })
     let uploadFilesSpy = spyOn(DioryFactory, 'createDioryFromFile').and.returnValue(uploadFilesReturnValue)
 
     let eventObject = { target: { files: ["file"] } }
     component.startUploading(eventObject).then(() => {
       expect(wrapper.state().state).toEqual("error")
+    })
+  })
+
+  it('goes to success state when diory is returned from DioryFactory.createDioryFromFile', () => {
+    // TODO: Return a real diory instead of "diory"
+    let uploadFilesReturnValue = new Promise(resolve => { resolve("diory") })
+    let uploadFilesSpy = spyOn(DioryFactory, 'createDioryFromFile').and.returnValue(uploadFilesReturnValue)
+
+    let eventObject = { target: { files: ["file"] } }
+    component.startUploading(eventObject).then(() => {
+      expect(wrapper.state().state).toEqual("success")
     })
   })
 
