@@ -13,7 +13,9 @@ describe('<DiographUpload />', () => {
   beforeEach(() => {
     secrets = {"master": "kissa123"}
     wrapper = shallow(
-      <DiographUpload secrets={ secrets } />
+      <DiographUpload
+        secrets={ secrets }
+        onDioryCreated={ diory => { console.log(diory) } } />
     )
     component = wrapper.instance();
   })

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DioryFactory } from './lib/diory-factory';
 
 export interface UploadState { state: string }
-export interface UploadProps { secrets: any }
+export interface UploadProps { onDioryCreated: any, secrets: any }
 
 export class DiographUpload extends React.Component <UploadProps, UploadState> {
 
@@ -44,6 +44,7 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
     return DioryFactory.createDioryFromFile(event.target.files[0], this.props.secrets.master).then(diory => {
       console.log(diory)
       this.setState({state: "success"})
+      this.props.onDioryCreated(diory)
     }, e => {
       console.log(e)
       console.log(e.message)
