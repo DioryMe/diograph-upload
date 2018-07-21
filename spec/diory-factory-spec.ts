@@ -79,6 +79,33 @@ describe('DioryFactory', () => {
         done()
       })
     })
+
+    it('calls DioryFactory.getFromEndpoint with correct arguments', done => {
+      createDioryFromFilePromise.then(diory => {
+        expect(getFromEndpointSpy.calls.count()).toEqual(1)
+        let endpoint = "http://localhost:3000/v1/presigned-upload-url"
+        expect(getFromEndpointSpy.calls.argsFor(0)).toEqual([endpoint, token])
+        done()
+      })
+    })
+
+    it('calls DioryFactory.extractEXIFData with correct arguments', done => {
+      createDioryFromFilePromise.then(diory => {
+        expect(extractEXIFDataSpy.calls.count()).toEqual(1)
+        expect(extractEXIFDataSpy.calls.argsFor(0)).toEqual([file])
+        done()
+      })
+    })
+
+    it('calls DioryFactory.uploadToS3 with correct arguments', done => {
+      createDioryFromFilePromise.then(diory => {
+        expect(uploadToS3Spy.calls.count()).toEqual(1)
+        expect(uploadToS3Spy.calls.argsFor(0)).toEqual([uploadUrlResponseObject.data["upload-url"], file])
+        done()
+      })
+    })
+
+
   })
 
 
