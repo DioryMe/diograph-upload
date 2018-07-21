@@ -35,7 +35,7 @@ export class DiographUpload extends React.Component <UploadProps, UploadState> {
 
   startUploading(event) {
     this.setState({state: "loading"})
-    DioryFactory.createDioryFromFile(event.target.files[0], this.props.secrets.master).then(diory => {
+    return DioryFactory.createDioryFromFile(event.target.files[0], this.props.secrets.master).then(diory => {
       console.log(diory)
       this.setState({state: "success"})
     }, e => {

@@ -36,8 +36,17 @@ describe('<DiographUpload />', () => {
     expect(uploadFilesSpy.calls.argsFor(0)).toEqual(["file", "kissa123"])
   })
 
+  it('goes to error state when error is thrown', () => {
+    let uploadFilesReturnValue = new Promise(() => { throw new Error("error") })
+    let uploadFilesSpy = spyOn(DioryFactory, 'createDioryFromFile').and.returnValue(uploadFilesReturnValue)
 
-  // Integration tests for UI states
+    let eventObject = { target: { files: ["file"] } }
+    component.startUploading(eventObject).then(() => {
+      expect(wrapper.state().state).toEqual("error")
+    })
+  })
+
+  // UI states
 
   it('Pending state: correct content for div', () => {
     wrapper.setState({ state: "pending" })
