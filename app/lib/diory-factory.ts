@@ -14,8 +14,7 @@ export class DioryFactory {
     // - files is not an Array but a "FileList" which doesn't have forEach() iterator...
     let dioryData = await this.generateDioryDataFromImageFile(file, token)
     return DiographStore.createDiory(dioryData).then(diory => {
-      // return diory
-      return "jeejee"
+      return diory
     })
   }
 
@@ -58,11 +57,7 @@ export class DioryFactory {
       })
 
     // Return file's public url on success
-    if (S3Response.ok) {
-      return uploadUrl["public-url"]
-    } else {
-      return "new Error(" + S3Response.body + ")"
-    }
+    return uploadUrl["public-url"]
   }
 
   static async uploadToS3(uploadUrl, file) {
