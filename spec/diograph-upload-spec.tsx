@@ -27,6 +27,7 @@ describe('<DiographUpload />', () => {
   // Integration tests for file uploading
 
   it('calls DioryFactory.createDioryFromFile() with correct attributes when file(s) are chosen', () => {
+    // TODO: Return a real diory instead of "jeejee"
     let uploadFilesReturnValue = new Promise(resolve => { resolve("jeejee") })
     let uploadFilesSpy = spyOn(DioryFactory, 'createDioryFromFile').and.returnValue(uploadFilesReturnValue)
     let eventObject = { target: { files: ["file"] } }

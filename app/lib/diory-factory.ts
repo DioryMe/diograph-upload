@@ -72,7 +72,7 @@ export class DioryFactory {
 
   static getUploadUrl(token) {
     // TODO: Use some similar generic DiographStore / DiographServerManager method instead of duplicating it here
-    return this.getFromEndpoint("http://localhost:3000/v1/presigned-upload-url", token).then(response => {
+    return this.getFromEndpoint(process.env.DIOGRAPH_SERVER_HOST + "/v1/presigned-upload-url", token).then(response => {
       return response.data
     })
   }

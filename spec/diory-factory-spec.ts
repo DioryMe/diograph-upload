@@ -20,6 +20,7 @@ describe('DioryFactory', () => {
   describe('createDioryFromFile', () => {
 
     beforeEach(() => {
+      process.env.DIOGRAPH_SERVER_HOST = "http://diograph-server.test"
       // Stub all the dependencies:
 
       // 1. DiographStore
@@ -84,7 +85,7 @@ describe('DioryFactory', () => {
     it('calls DioryFactory.getFromEndpoint with correct arguments', done => {
       createDioryFromFilePromise.then(diory => {
         expect(getFromEndpointSpy.calls.count()).toEqual(1)
-        let endpoint = "http://localhost:3000/v1/presigned-upload-url"
+        let endpoint = process.env.DIOGRAPH_SERVER_HOST + "/v1/presigned-upload-url"
         expect(getFromEndpointSpy.calls.argsFor(0)).toEqual([endpoint, token])
         done()
       })
