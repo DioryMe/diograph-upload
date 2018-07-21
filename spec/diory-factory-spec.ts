@@ -12,6 +12,7 @@ describe('DioryFactory', () => {
 
   let file = {name: "New Diory from Image file"}
   let token = "cat4321"
+  let createdDiory = {}
   let uploadUrlResponseObject, exifData
   let setAuthTokenSpy, createDiorySpy, getFromEndpointSpy, extractEXIFDataSpy, uploadToS3Spy
   let createDioryFromFilePromise
@@ -23,7 +24,7 @@ describe('DioryFactory', () => {
 
       // 1. DiographStore
       setAuthTokenSpy = spyOn(DiographStore, "setAuthToken")
-      createDiorySpy = spyOn(DiographStore, "createDiory").and.returnValue(genericPromise())
+      createDiorySpy = spyOn(DiographStore, "createDiory").and.returnValue(genericPromise(createdDiory))
 
       // 2. DiographServer presigned-upload-url endpoint
       uploadUrlResponseObject = {
@@ -51,9 +52,9 @@ describe('DioryFactory', () => {
       createDioryFromFilePromise = DioryFactory.createDioryFromFile(file, token)
     })
 
-    it('returns "jeejee"', done => {
+    it('returns ', done => {
       createDioryFromFilePromise.then(diory => {
-        expect(diory).toEqual("jeejee")
+        expect(diory).toEqual(createdDiory)
         done()
       })
     })
