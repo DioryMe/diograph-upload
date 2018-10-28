@@ -1,5 +1,13 @@
 # Diograph Upload
 
+```
+import { DiographUpload } from "diograph-upload"
+
+<DiographUpload
+  secrets={{ "master": "kissa123" }}
+  onDioryCreated={ diory => { console.log(diory) } } />
+```
+
 ## Usage / Development
 
 ```
