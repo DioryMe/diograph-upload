@@ -2,6 +2,7 @@
   "name": "diograph-upload",
   "version": "0.0.1",
   "description": "",
+  "main": "dist/app/diograph-upload.js",
   "scripts": {
     "start": "npx webpack && cp ./app/index.html ./dist && npx webpack-dev-server --port 4204 --content-base dist/ --inline --hot",
     "test": "npx tsc && npx jasmine JASMINE_CONFIG_PATH=jasmine.json",
