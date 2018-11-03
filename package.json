@@ -18,7 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jasmine": "2.8.6",
-    "@types/node": "*",
+    "@types/node": "8.0.28",
     "@types/react": "16.3.10",
     "@types/superagent": "3.8.2",
     "jasmine": "2.8.0",
