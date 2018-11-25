@@ -9,10 +9,10 @@
   ],
   "scripts": {
     "start": "npx webpack && cp ./app/index.html ./dist/index.html && npx webpack-dev-server",
-    "test": "npx tsc && npx jasmine JASMINE_CONFIG_PATH=jasmine.json",
+    "test": "rm -r ./dist; npx tsc -p tsconfig.test.json && npx jasmine JASMINE_CONFIG_PATH=jasmine.json",
     "e2e": "npx tsc && npx webpack && npx jasmine JASMINE_CONFIG_PATH=jasmine.json",
-    "compile": "npx webpack",
-    "prepublish": "npx tsc"
+    "compile": "rm -r ./dist; npx tsc",
+    "prepublish": "rm -r ./dist; npx tsc"
   },
   "author": "",
   "license": "ISC",

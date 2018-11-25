@@ -4,14 +4,10 @@
     "target": "es5",
     "sourceMap": false,
     "allowJs": true,
-    "rootDir": "app",
     "outDir": "dist",
     "jsx": "react"
   },
   "include": [
-    "app"
-  ],
-  "exclude": [
-    "app/index.*"
+    "spec"
   ]
 }
