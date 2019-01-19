@@ -10,9 +10,8 @@
   "scripts": {
     "start": "npx webpack && cp ./app/index.html ./dist/index.html && npx webpack-dev-server",
     "test": "rm -r ./dist; npx tsc -p tsconfig.test.json && npx jasmine JASMINE_CONFIG_PATH=jasmine.json",
-    "e2e": "npx tsc && npx webpack && npx jasmine JASMINE_CONFIG_PATH=jasmine.json",
     "compile": "rm -r ./dist; npx tsc",
-    "prepublish": "rm -r ./dist; npx tsc"
+    "prepublish": "npm run compile"
   },
   "author": "",
   "license": "ISC",
@@ -31,10 +30,10 @@
     "enzyme-adapter-react-16": "1.1.0"
   },
   "dependencies": {
-    "react": "16.3.1",
-    "react-dom": "16.3.1",
     "diograph-store": "*",
     "exif-js": "2.3.0",
+    "react": "16.3.1",
+    "react-dom": "16.3.1",
     "superagent": "3.8.2"
   }
 }
